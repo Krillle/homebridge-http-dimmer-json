@@ -1,111 +1,60 @@
 {
-  "pluginAlias": "HTTP-JSON-DIMMER",
-  "pluginType": "accessory",
-  "singular": false,
-  "schema": {
-    "type": "object",
-    "required": ["name", "onUrl", "offUrl"],
-    "properties": {
-      "name": {
-        "title": "Accessory Name",
-        "type": "string",
-        "description": "Name shown in HomeKit",
-        "placeholder": "Bathroom Mirror"
-      },
+  "type": "object",
+  "required": ["name", "onUrl", "offUrl"],
+  "properties": {
+    "name": {
+      "title": "Accessory Name",
+      "type": "string",
+      "placeholder": "Bathroom Mirror"
+    },
 
-      "onUrl": {
-        "title": "ON URL",
-        "type": "string",
-        "description": "HTTP URL to switch the light ON",
-        "placeholder": "http://device.local/rpc/Light.Set?id=3&on=true"
-      },
+    "onUrl": {
+      "title": "ON URL",
+      "type": "string",
+      "placeholder": "http://device/rpc/Light.Set?id=3&on=true"
+    },
 
-      "offUrl": {
-        "title": "OFF URL",
-        "type": "string",
-        "description": "HTTP URL to switch the light OFF",
-        "placeholder": "http://device.local/rpc/Light.Set?id=3&on=false"
-      },
+    "offUrl": {
+      "title": "OFF URL",
+      "type": "string",
+      "placeholder": "http://device/rpc/Light.Set?id=3&on=false"
+    },
 
-      "statusUrl": {
-        "title": "Status URL",
-        "type": "string",
-        "description": "HTTP URL returning JSON state (e.g. Light.GetStatus)"
-      },
+    "statusUrl": {
+      "title": "Status URL",
+      "type": "string",
+      "description": "URL returning JSON status"
+    },
 
-      "onJsonPath": {
-        "title": "ON JSON Path",
-        "type": "string",
-        "default": "$.on",
-        "description": "JSONPath or dotted path resolving to boolean ON state"
-      },
+    "onJsonPath": {
+      "title": "ON JSON Path",
+      "type": "string",
+      "default": "$.on"
+    },
 
-      "setBrightnessUrl": {
-        "title": "Set Brightness URL",
-        "type": "string",
-        "description": "Brightness value (0–100) will be appended to this URL"
-      },
+    "setBrightnessUrl": {
+      "title": "Set Brightness URL",
+      "type": "string",
+      "description": "Brightness value (0–100) is appended"
+    },
 
-      "getBrightnessUrl": {
-        "title": "Get Brightness URL",
-        "type": "string",
-        "description": "HTTP URL returning JSON brightness value"
-      },
+    "getBrightnessUrl": {
+      "title": "Get Brightness URL",
+      "type": "string"
+    },
 
-      "brightnessJsonPath": {
-        "title": "Brightness JSON Path",
-        "type": "string",
-        "default": "$.brightness",
-        "description": "JSONPath or dotted path resolving to brightness"
-      },
+    "brightnessJsonPath": {
+      "title": "Brightness JSON Path",
+      "type": "string",
+      "default": "$.brightness"
+    },
 
-      "brightnessScale": {
-        "title": "Brightness Scale (device → HomeKit)",
-        "type": "string",
-        "default": "0-100",
-        "oneOf": [
-          { "title": "0–100", "enum": ["0-100"] },
-          { "title": "0–255", "enum": ["0-255"] },
-          { "title": "0–1", "enum": ["0-1"] }
-        ]
-      },
-
-      "brightnessWriteScale": {
-        "title": "Brightness Scale (HomeKit → device)",
-        "type": "string",
-        "default": "0-100",
-        "oneOf": [
-          { "title": "0–100", "enum": ["0-100"] },
-          { "title": "0–255", "enum": ["0-255"] },
-          { "title": "0–1", "enum": ["0-1"] }
-        ]
-      },
-
-      "timeoutMs": {
-        "title": "HTTP Timeout (ms)",
-        "type": "integer",
-        "default": 4000,
-        "minimum": 500,
-        "maximum": 20000
-      },
-
-      "manufacturer": {
-        "title": "Manufacturer",
-        "type": "string",
-        "default": "HTTP JSON Dimmer"
-      },
-
-      "model": {
-        "title": "Model",
-        "type": "string",
-        "default": "HTTP-JSON-DIMMER"
-      },
-
-      "serial": {
-        "title": "Serial Number",
-        "type": "string",
-        "default": "http-json-dimmer"
-      }
+    "timeoutMs": {
+      "title": "HTTP Timeout (ms)",
+      "type": "integer",
+      "default": 4000,
+      "minimum": 500,
+      "maximum": 20000
     }
   }
 }
