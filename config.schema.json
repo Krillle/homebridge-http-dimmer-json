@@ -1,92 +1,137 @@
 {
   "pluginAlias": "HTTP-JSON-DIMMER",
-  "pluginType": "accessory",
+  "pluginType": "platform",
   "singular": true,
-  "headerDisplay": "Configure a single HTTP JSON dimmer accessory. The plugin calls your ON/OFF endpoints and can optionally read status and brightness from JSON responses.",
-  "footerDisplay": "Need help or want to report an issue? Please open an issue on the GitHub repository.",
+  "headerDisplay": "Configure one platform instance that can create multiple HTTP JSON dimmer accessories.",
   "schema": {
     "type": "object",
-    "required": ["name", "onUrl", "offUrl"],
+    "required": ["devices"],
     "properties": {
-      "name": {
-        "title": "Accessory Name",
-        "type": "string",
-        "description": "Displayed name for this accessory in HomeKit.",
-        "placeholder": "Bathroom Mirror"
-      },
-      "onUrl": {
-        "title": "ON URL",
-        "type": "string",
-        "description": "HTTP endpoint called to turn the accessory on.",
-        "placeholder": "http://device/rpc/Light.Set?id=3&on=true"
-      },
-      "offUrl": {
-        "title": "OFF URL",
-        "type": "string",
-        "description": "HTTP endpoint called to turn the accessory off.",
-        "placeholder": "http://device/rpc/Light.Set?id=3&on=false"
-      },
-      "statusUrl": {
-        "title": "Status URL",
-        "type": "string",
-        "description": "Optional endpoint that returns JSON status for the device. Used to keep HomeKit in sync."
-      },
-      "onJsonPath": {
-        "title": "ON JSON Path",
-        "type": "string",
-        "default": "$.on",
-        "description": "JSONPath to the boolean on/off state in the status response."
-      },
-      "setBrightnessUrl": {
-        "title": "Set Brightness URL",
-        "type": "string",
-        "description": "Endpoint used to set brightness. The brightness value (0–100) will be appended.",
-        "placeholder": "http://device/rpc/Light.Set?id=3&brightness="
-      },
-      "getBrightnessUrl": {
-        "title": "Get Brightness URL",
-        "type": "string",
-        "description": "Optional endpoint that returns JSON with the current brightness value."
-      },
-      "brightnessJsonPath": {
-        "title": "Brightness JSON Path",
-        "type": "string",
-        "default": "$.brightness",
-        "description": "JSONPath to the brightness number in the brightness response."
-      },
-      "timeoutMs": {
-        "title": "HTTP Timeout (ms)",
-        "type": "integer",
-        "default": 4000,
-        "minimum": 500,
-        "maximum": 20000,
-        "description": "Request timeout for all HTTP calls, in milliseconds."
+      "devices": {
+        "type": "array",
+        "title": "Devices",
+        "items": { "$ref": "#/definitions/device" },
+        "default": []
+      }
+    },
+    "definitions": {
+      "device": {
+        "type": "object",
+        "required": ["name", "onUrl", "offUrl"],
+        "properties": {
+          "id": {
+            "title": "ID (optional, but recommended)",
+            "type": "string",
+            "description": "Stable identifier for UUID generation. If omitted, name is used.",
+            "placeholder": "bathroom-mirror"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "placeholder": "Bathroom Mirror"
+          },
+          "onUrl": {
+            "title": "ON URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.Set?id=3&on=true"
+          },
+          "offUrl": {
+            "title": "OFF URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.Set?id=3&on=false"
+          },
+          "statusUrl": {
+            "title": "Status URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.GetStatus?id=3"
+          },
+          "onJsonPath": {
+            "title": "ON JSON Path",
+            "type": "string",
+            "default": "$.on"
+          },
+          "setBrightnessUrl": {
+            "title": "Set Brightness URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.Set?id=3&brightness="
+          },
+          "getBrightnessUrl": {
+            "title": "Get Brightness URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.GetStatus?id=3"
+          },
+          "brightnessJsonPath": {
+            "title": "Brightness JSON Path",
+            "type": "string",
+            "default": "$.brightness"
+          },
+          "timeoutMs": {
+            "title": "HTTP Timeout (ms)",
+            "type": "integer",
+            "default": 4000,
+            "minimum": 500,
+            "maximum": 20000
+          },
+          "brightnessScale": {
+            "title": "Brightness Scale (device → HomeKit)",
+            "type": "string",
+            "default": "0-100",
+            "oneOf": [
+              { "title": "0–100", "enum": ["0-100"] },
+              { "title": "0–255", "enum": ["0-255"] },
+              { "title": "0–1", "enum": ["0-1"] }
+            ]
+          },
+          "brightnessWriteScale": {
+            "title": "Brightness Scale (HomeKit → device)",
+            "type": "string",
+            "default": "0-100",
+            "oneOf": [
+              { "title": "0–100", "enum": ["0-100"] },
+              { "title": "0–255", "enum": ["0-255"] },
+              { "title": "0–1", "enum": ["0-1"] }
+            ]
+          }
+        }
       }
     }
   },
-  "form": null,
-  "display": null,
   "layout": [
     {
-      "items": ["name", "onUrl", "offUrl"]
-    },
-    {
-      "type": "fieldset",
-      "title": "Status (Optional)",
-      "expandable": true,
-      "items": ["statusUrl", "onJsonPath"]
-    },
-    {
-      "type": "fieldset",
-      "title": "Brightness (Optional)",
-      "expandable": true,
-      "items": ["setBrightnessUrl", "getBrightnessUrl", "brightnessJsonPath"]
-    },
-    {
-      "type": "fieldset",
-      "title": "Advanced",
-      "expandable": true,
-      "items": ["timeoutMs"]
+      "type": "array",
+      "key": "devices",
+      "title": "Devices",
+      "buttonText": "Add Device",
+      "items": [
+        "devices[].id",
+        "devices[].name",
+        "devices[].onUrl",
+        "devices[].offUrl",
+        {
+          "type": "fieldset",
+          "title": "Status (Optional)",
+          "expandable": true,
+          "items": ["devices[].statusUrl", "devices[].onJsonPath"]
+        },
+        {
+          "type": "fieldset",
+          "title": "Brightness (Optional)",
+          "expandable": true,
+          "items": [
+            "devices[].setBrightnessUrl",
+            "devices[].getBrightnessUrl",
+            "devices[].brightnessJsonPath",
+            "devices[].brightnessScale",
+            "devices[].brightnessWriteScale"
+          ]
+        },
+        {
+          "type": "fieldset",
+          "title": "Advanced",
+          "expandable": true,
+          "items": ["devices[].timeoutMs"]
+        }
+      ]
     }
   ]
 }

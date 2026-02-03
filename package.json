@@ -7,8 +7,7 @@
   "keywords": ["homebridge-plugin", "homebridge", "http", "dimmer", "json"],
   "homebridge": {
     "pluginAlias": "HTTP-JSON-DIMMER",
-    "pluginType": "accessory",
-    "configSchema": "config.schema.json"
+    "pluginType": "platform"
   },
   "engines": {
     "node": ">=18.0.0",
