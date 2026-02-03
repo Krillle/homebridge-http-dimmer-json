@@ -1,60 +1,92 @@
 {
-  "type": "object",
-  "required": ["name", "onUrl", "offUrl"],
-  "properties": {
-    "name": {
-      "title": "Accessory Name",
-      "type": "string",
-      "placeholder": "Bathroom Mirror"
-    },
-
-    "onUrl": {
-      "title": "ON URL",
-      "type": "string",
-      "placeholder": "http://device/rpc/Light.Set?id=3&on=true"
-    },
-
-    "offUrl": {
-      "title": "OFF URL",
-      "type": "string",
-      "placeholder": "http://device/rpc/Light.Set?id=3&on=false"
-    },
-
-    "statusUrl": {
-      "title": "Status URL",
-      "type": "string",
-      "description": "URL returning JSON status"
-    },
-
-    "onJsonPath": {
-      "title": "ON JSON Path",
-      "type": "string",
-      "default": "$.on"
-    },
-
-    "setBrightnessUrl": {
-      "title": "Set Brightness URL",
-      "type": "string",
-      "description": "Brightness value (0–100) is appended"
-    },
-
-    "getBrightnessUrl": {
-      "title": "Get Brightness URL",
-      "type": "string"
-    },
-
-    "brightnessJsonPath": {
-      "title": "Brightness JSON Path",
-      "type": "string",
-      "default": "$.brightness"
-    },
-
-    "timeoutMs": {
-      "title": "HTTP Timeout (ms)",
-      "type": "integer",
-      "default": 4000,
-      "minimum": 500,
-      "maximum": 20000
+  "pluginAlias": "HTTP-JSON-DIMMER",
+  "pluginType": "accessory",
+  "singular": true,
+  "headerDisplay": "Configure a single HTTP JSON dimmer accessory. The plugin calls your ON/OFF endpoints and can optionally read status and brightness from JSON responses.",
+  "footerDisplay": "Need help or want to report an issue? Please open an issue on the GitHub repository.",
+  "schema": {
+    "type": "object",
+    "required": ["name", "onUrl", "offUrl"],
+    "properties": {
+      "name": {
+        "title": "Accessory Name",
+        "type": "string",
+        "description": "Displayed name for this accessory in HomeKit.",
+        "placeholder": "Bathroom Mirror"
+      },
+      "onUrl": {
+        "title": "ON URL",
+        "type": "string",
+        "description": "HTTP endpoint called to turn the accessory on.",
+        "placeholder": "http://device/rpc/Light.Set?id=3&on=true"
+      },
+      "offUrl": {
+        "title": "OFF URL",
+        "type": "string",
+        "description": "HTTP endpoint called to turn the accessory off.",
+        "placeholder": "http://device/rpc/Light.Set?id=3&on=false"
+      },
+      "statusUrl": {
+        "title": "Status URL",
+        "type": "string",
+        "description": "Optional endpoint that returns JSON status for the device. Used to keep HomeKit in sync."
+      },
+      "onJsonPath": {
+        "title": "ON JSON Path",
+        "type": "string",
+        "default": "$.on",
+        "description": "JSONPath to the boolean on/off state in the status response."
+      },
+      "setBrightnessUrl": {
+        "title": "Set Brightness URL",
+        "type": "string",
+        "description": "Endpoint used to set brightness. The brightness value (0–100) will be appended.",
+        "placeholder": "http://device/rpc/Light.Set?id=3&brightness="
+      },
+      "getBrightnessUrl": {
+        "title": "Get Brightness URL",
+        "type": "string",
+        "description": "Optional endpoint that returns JSON with the current brightness value."
+      },
+      "brightnessJsonPath": {
+        "title": "Brightness JSON Path",
+        "type": "string",
+        "default": "$.brightness",
+        "description": "JSONPath to the brightness number in the brightness response."
+      },
+      "timeoutMs": {
+        "title": "HTTP Timeout (ms)",
+        "type": "integer",
+        "default": 4000,
+        "minimum": 500,
+        "maximum": 20000,
+        "description": "Request timeout for all HTTP calls, in milliseconds."
+      }
     }
-  }
+  },
+  "form": null,
+  "display": null,
+  "layout": [
+    {
+      "items": ["name", "onUrl", "offUrl"]
+    },
+    {
+      "type": "fieldset",
+      "title": "Status (Optional)",
+      "expandable": true,
+      "items": ["statusUrl", "onJsonPath"]
+    },
+    {
+      "type": "fieldset",
+      "title": "Brightness (Optional)",
+      "expandable": true,
+      "items": ["setBrightnessUrl", "getBrightnessUrl", "brightnessJsonPath"]
+    },
+    {
+      "type": "fieldset",
+      "title": "Advanced",
+      "expandable": true,
+      "items": ["timeoutMs"]
+    }
+  ]
 }
