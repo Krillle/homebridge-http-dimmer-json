@@ -2,15 +2,136 @@
   "pluginAlias": "HTTP-JSON-DIMMER",
   "pluginType": "platform",
   "singular": true,
+  "headerDisplay": "Configure one platform instance that can create multiple HTTP JSON dimmer accessories.",
   "schema": {
     "type": "object",
+    "required": ["devices"],
     "properties": {
-      "name": {
-        "title": "Name",
-        "type": "string",
-        "required": true,
-        "default": "HTTP-JSON-DIMMER"
+      "devices": {
+        "type": "array",
+        "title": "Devices",
+        "items": { "$ref": "#/definitions/device" },
+        "default": []
+      }
+    },
+    "definitions": {
+      "device": {
+        "type": "object",
+        "required": ["name", "onUrl", "offUrl"],
+        "properties": {
+          "id": {
+            "title": "ID (optional, but recommended)",
+            "type": "string",
+            "description": "Stable identifier for UUID generation. If omitted, name is used.",
+            "placeholder": "bathroom-mirror"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "placeholder": "Bathroom Mirror"
+          },
+          "onUrl": {
+            "title": "ON URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.Set?id=3&on=true"
+          },
+          "offUrl": {
+            "title": "OFF URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.Set?id=3&on=false"
+          },
+          "statusUrl": {
+            "title": "Status URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.GetStatus?id=3"
+          },
+          "onJsonPath": {
+            "title": "ON JSON Path",
+            "type": "string",
+            "default": "$.on"
+          },
+          "setBrightnessUrl": {
+            "title": "Set Brightness URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.Set?id=3&brightness="
+          },
+          "getBrightnessUrl": {
+            "title": "Get Brightness URL",
+            "type": "string",
+            "placeholder": "http://192.168.4.10/rpc/Light.GetStatus?id=3"
+          },
+          "brightnessJsonPath": {
+            "title": "Brightness JSON Path",
+            "type": "string",
+            "default": "$.brightness"
+          },
+          "timeoutMs": {
+            "title": "HTTP Timeout (ms)",
+            "type": "integer",
+            "default": 4000,
+            "minimum": 500,
+            "maximum": 20000
+          },
+          "brightnessScale": {
+            "title": "Brightness Scale (device → HomeKit)",
+            "type": "string",
+            "default": "0-100",
+            "oneOf": [
+              { "title": "0–100", "enum": ["0-100"] },
+              { "title": "0–255", "enum": ["0-255"] },
+              { "title": "0–1", "enum": ["0-1"] }
+            ]
+          },
+          "brightnessWriteScale": {
+            "title": "Brightness Scale (HomeKit → device)",
+            "type": "string",
+            "default": "0-100",
+            "oneOf": [
+              { "title": "0–100", "enum": ["0-100"] },
+              { "title": "0–255", "enum": ["0-255"] },
+              { "title": "0–1", "enum": ["0-1"] }
+            ]
+          }
+        }
       }
     }
-  }
+  },
+  "layout": [
+    {
+      "type": "array",
+      "key": "devices",
+      "title": "Devices",
+      "buttonText": "Add Device",
+      "items": [
+        "devices[].id",
+        "devices[].name",
+        "devices[].onUrl",
+        "devices[].offUrl",
+        {
+          "type": "fieldset",
+          "title": "Status (Optional)",
+          "expandable": true,
+          "items": ["devices[].statusUrl", "devices[].onJsonPath"]
+        },
+        {
+          "type": "fieldset",
+          "title": "Brightness (Optional)",
+          "expandable": true,
+          "items": [
+            "devices[].setBrightnessUrl",
+            "devices[].getBrightnessUrl",
+            "devices[].brightnessJsonPath",
+            "devices[].brightnessScale",
+            "devices[].brightnessWriteScale"
+          ]
+        },
+        {
+          "type": "fieldset",
+          "title": "Advanced",
+          "expandable": true,
+          "items": ["devices[].timeoutMs"]
+        }
+      ]
+    }
+  ]
 }
