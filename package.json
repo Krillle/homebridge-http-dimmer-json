@@ -1,0 +1,14 @@
+{
+  "name": "homebridge-http-json-dimmer",
+  "version": "1.0.0",
+  "description": "Homebridge HTTP dimmer accessory with JSON status/brightness support",
+  "main": "index.js",
+  "keywords": ["homebridge-plugin", "homebridge", "http", "dimmer", "json"],
+  "engines": {
+    "node": ">=18.0.0",
+    "homebridge": ">=1.6.0"
+  },
+  "dependencies": {
+    "jsonpath-plus": "^10.3.0"
+  }
+}
